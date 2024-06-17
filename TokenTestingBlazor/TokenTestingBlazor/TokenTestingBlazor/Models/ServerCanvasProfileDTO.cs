@@ -1,5 +1,8 @@
 ﻿namespace TokenTestingBlazor.Models
 {
+    /// <summary>
+    /// Data transfer object for a Canvas profile.
+    /// </summary>
     public class ServerCanvasProfileDTO
     {
         public int id { get; set; }

@@ -1,16 +1,66 @@
 ﻿@page "/courses"
 @rendermode @(new InteractiveWebAssemblyRenderMode(prerender: false))
 
+@inject CookieStorageAccessor cookies
+@inject CanvasCourseAccessor courses
+
+@*For viewing Canvas courses*@
 <PageTitle>Courses</PageTitle>
 
 <TokenTestingBlazor.Client.Components.LoginHeader>
 
     <h3>Courses</h3>
 
-    <p>Coming soon...</p>
+    @if (loading)
+    {
+        <p>Loading...</p>
+    }
+    else if (!loading && token is null)
+    {
+        <p>You must be logged in to view this page...</p>
+    }
+    else if (courseList.Count > 0)
+    {
+        <div>
+            @foreach (CanvasCourseDTO course in courseList)
+            {
+                <p>course.name</p>
+            }
+        </div>
+    }
+    else
+    {
+        <p>Nothing to display...</p>
+    }
 
 </TokenTestingBlazor.Client.Components.LoginHeader>
 
 @code {
+    private bool loading = true;
+    private string? token;
+    private List<CanvasCourseDTO> courseList = new List<CanvasCourseDTO>();
 
+    private async Task FetchAllCourses()
+    {
+        token = await cookies.GetValueAsync<string>("canvas_access_token");
+
+        if (token is not null)
+        {
+            try
+            {
+                courseList = await courses.GetAllCoursesAsync(token);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error fetching courses...");
+                Console.WriteLine(ex);
+            }
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await FetchAllCourses();
+        loading = false;
+    }
 }

@@ -40,7 +40,7 @@
     {
         token = await cookies.GetValueAsync<string>("canvas_access_token");
 
-        if (token != null)
+        if (token is not null)
         {
             try
             {

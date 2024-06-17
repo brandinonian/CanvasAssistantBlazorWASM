@@ -18,7 +18,7 @@ namespace TokenTestingBlazor.Client
 
         public async Task<CanvasProfileDTO> GetCanvasProfileAsync(string token)
         {
-            var apiEndpoint = domain + "/api/profile/getProfile";
+            var apiEndpoint = domain + "/api/profile";
 
             _client.DefaultRequestHeaders.Clear();
             _client.DefaultRequestHeaders.Add("token", token);

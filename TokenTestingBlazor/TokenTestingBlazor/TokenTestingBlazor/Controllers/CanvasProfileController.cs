@@ -1,34 +1,30 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
-using System.Net.Http.Headers;
 using TokenTestingBlazor.Models;
 
 namespace TokenTestingBlazor.Controllers
 {
-    [Route("api/profile")]
+    /// <summary>
+    /// Controller class for accessing the user's profile data.
+    /// </summary>
     [ApiController]
     public class CanvasProfileController : ControllerBase
     {
 
         private readonly HttpClient _client = new HttpClient();
 
-        // GET: /api/profile/getProfile ??? Getting 404s...
         /// <summary>
-        /// Get the user's profile. Requires a valid refresh token.
+        /// Get the user's profile. Endpoint[GET]: /api/profile/getProfile
         /// </summary>
         /// <param name="token">Canvas refresh token</param>
         /// <returns>Canvas user</returns>
-        [HttpGet("getProfile")]
+        [HttpGet, Route("api/profile")]
         public async Task<ActionResult<ServerCanvasProfileDTO>> GetCanvasProfileAsync([FromHeader] string token)
         {
-            Console.WriteLine("Token: " + token);
-
             var request = new HttpRequestMessage();
             request.RequestUri = new Uri("https://davistech.instructure.com/api/v1/users/self/profile");
             request.Method = HttpMethod.Get;
             request.Headers.Add("Authorization", "Bearer " + token);
-
-            Console.WriteLine(request.Headers);
 
             var response = await _client.SendAsync(request);
 
