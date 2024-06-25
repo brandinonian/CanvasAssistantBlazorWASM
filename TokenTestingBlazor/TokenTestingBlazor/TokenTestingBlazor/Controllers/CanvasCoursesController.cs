@@ -32,16 +32,18 @@ namespace TokenTestingBlazor.Controllers
 
             StringContent json = new (JsonSerializer.Serialize(gql), new MediaTypeHeaderValue("application/graphql"));
 
-            Console.WriteLine(await json.ReadAsStringAsync());
+            //Console.WriteLine(await json.ReadAsStringAsync());
 
             _client.DefaultRequestHeaders.Add("Authorization", "Bearer " + token);
 
             HttpResponseMessage response = await _client.PostAsync(_endpoint, json);
 
             response.EnsureSuccessStatusCode();
+            Console.WriteLine("Status code: " + response.StatusCode);
 
             var resJson = await response.Content.ReadAsStringAsync();
-            Console.WriteLine(resJson);
+            Console.WriteLine();
+            Console.WriteLine("Response: " + resJson);
 
             return Ok();
             //return Ok(JsonSerializer.Deserialize<List<ServerCanvasCourseDTO>>(response.Content.ReadAsStream()));
